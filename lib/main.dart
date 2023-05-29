@@ -1,6 +1,6 @@
 
 import 'package:doit/core/routes/app_routes.dart';
-import 'package:doit/view/home/cubit/home_cubit.dart';
+import 'package:doit/home/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
