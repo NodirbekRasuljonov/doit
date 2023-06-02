@@ -3,8 +3,15 @@ import 'package:doit/core/routes/app_routes.dart';
 import 'package:doit/home/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Box box = await Hive.openBox('testBox');
+  box.put('name', 'David');
+
+
   runApp(
     MultiBlocProvider(
       providers: [
