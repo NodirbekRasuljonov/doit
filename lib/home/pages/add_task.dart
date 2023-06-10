@@ -9,25 +9,66 @@ class AddTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String value = 'later';
     return Scaffold(
       backgroundColor: ColorConst.kBackgroundColor,
       appBar: appBar(),
       body: BlocConsumer<HomeCubit, HomeState>(
         builder: (context, state) {
           return Container(
-            padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TextFormField(),
+                textFormField(
+                    controller: context.read<HomeCubit>().taskController),
                 space(),
-                TextFormField(),
+                DropdownButtonFormField(
+                  value: value,
+                  items: const [
+                    DropdownMenuItem(
+                      value: "later",
+                      child: Text("Later"),
+                    ),
+                    DropdownMenuItem(
+                      value: "important",
+                      child: Text("Important"),
+                    ),
+                    DropdownMenuItem(
+                      value: "urgent",
+                      child: Text("Urgent"),
+                    )
+                  ],
+                  onChanged: (v) {
+                    value = v.toString();
+                    print(value);
+                  },
+                ),
                 space(),
                 ElevatedButton(
-                  onPressed: () {},
-                  child: Text("Add"),
+                  onPressed: () {
+                    if (BlocProvider.of<HomeCubit>(context).taskController.text.isNotEmpty) {
+                      context.read<HomeCubit>().writeToHive(urgent: value);
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Task is not provided"),
+                              content: Text("Shgdhasasd"),
+                              actions: [
+                                TextButton(onPressed: () {
+                                  Navigator.pop(context);
+                                }, child: Text("OK"))
+                              ],
+                            );
+                          });
+                    }
+                  },
+                  child: const Text("Add"),
                 )
               ],
             ),
@@ -38,7 +79,17 @@ class AddTaskPage extends StatelessWidget {
     );
   }
 
-  SizedBox space() => SizedBox(
+  TextFormField textFormField({required TextEditingController controller}) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderSide: BorderSide(color: ColorConst.kTextColor)),
+      ),
+    );
+  }
+
+  SizedBox space() => const SizedBox(
         height: 20.0,
       );
 
