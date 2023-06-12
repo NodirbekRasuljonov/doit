@@ -34,7 +34,11 @@ class HomePage extends StatelessWidget {
             width: 100.0,
             color: Colors.amber,
           );
-        } else {
+        }
+        else if(state is HomeLoadingState){
+          return Center(child: CircularProgressIndicator.adaptive(),);
+        }
+         else {
           return Text("Errror");
         }
       },
